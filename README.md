@@ -18,10 +18,11 @@ view and layout adapters, server functions); `@payloadcms/ui` is used unmodified
 | Vite | `8.x` |
 | Node.js | `>= 24.15` (Payload 4) |
 
-A complete working app lives in [`apps/web-payload`](../../apps/web-payload): SQLite, Lexical,
-drafts + autosave, uploads, two locales, a global, and a website that reads content through
-the Local API. It is covered by a 26-test Playwright bench that runs in CI against both the
-production build and `vite dev`.
+The adapter is exercised by a demo app: SQLite, Lexical, drafts + autosave, uploads, two
+locales, a global, and a website that reads content through the Local API. A 26-test Playwright
+bench runs on that app against both the production build and `vite dev`, with the adapter
+installed from the packed tarball. The demo app is in a private repository for now; the
+scenarios and results are in [`docs/COMPAT.md`](./docs/COMPAT.md).
 
 ## Adding Payload to a React Router app
 
@@ -241,7 +242,8 @@ The schema is pushed automatically in development only. For production, create m
 
 The full contract-by-contract comparison with `@payloadcms/next` and
 `@payloadcms/tanstack-start`, and every issue found in the contracts, are in
-[`NOTES.md`](../../NOTES.md). Test coverage is in [`COMPAT.md`](../../COMPAT.md).
+[`docs/NOTES.md`](./docs/NOTES.md) (in French). Test coverage is in
+[`docs/COMPAT.md`](./docs/COMPAT.md).
 
 ## Why RSC
 

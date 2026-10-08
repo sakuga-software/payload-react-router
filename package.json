@@ -1,34 +1,69 @@
 {
   "name": "payload-react-router",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "description": "React Router v8 (RSC framework mode) adapter for the Payload CMS admin panel and REST/GraphQL API",
+  "keywords": [
+    "payload",
+    "payloadcms",
+    "react-router",
+    "rsc",
+    "adapter",
+    "vite"
+  ],
   "license": "MIT",
+  "author": "Sakuga Software (https://sakuga.dev)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sakuga-software/payload-react-router.git"
+  },
+  "bugs": "https://github.com/sakuga-software/payload-react-router/issues",
+  "homepage": "https://github.com/sakuga-software/payload-react-router#readme",
   "type": "module",
   "exports": {
-    "./client": "./src/exports/client.ts",
-    "./server": "./src/exports/server.ts",
-    "./vite": "./src/exports/vite.ts"
+    "./client": {
+      "types": "./dist/exports/client.d.ts",
+      "default": "./dist/exports/client.js"
+    },
+    "./server": {
+      "types": "./dist/exports/server.d.ts",
+      "default": "./dist/exports/server.js"
+    },
+    "./vite": {
+      "types": "./dist/exports/vite.d.ts",
+      "default": "./dist/exports/vite.js"
+    },
+    "./package.json": "./package.json"
   },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=24.15.0"
+  },
+  "packageManager": "pnpm@10.33.2",
   "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
-    "test": "node --test 'test/*.test.ts'"
+    "test": "node --test 'test/*.test.ts'",
+    "prepack": "pnpm build"
   },
   "dependencies": {
+    "esbuild": "^0.27.0 || ^0.28.0",
     "graphql-http": "1.22.4"
   },
   "peerDependencies": {
+    "@payloadcms/graphql": "4.0.0-canary.39",
     "@payloadcms/translations": "4.0.0-canary.39",
     "@payloadcms/ui": "4.0.0-canary.39",
-    "@vitejs/plugin-rsc": "~0.5.26",
+    "@vitejs/plugin-rsc": "0.5.35",
     "payload": "4.0.0-canary.39",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-router": "8.4.0",
-    "vite": ">=8.0.0",
-    "@payloadcms/graphql": "4.0.0-canary.39"
+    "vite": ">=8.0.0"
   },
   "devDependencies": {
+    "@payloadcms/graphql": "4.0.0-canary.39",
     "@payloadcms/translations": "4.0.0-canary.39",
     "@payloadcms/ui": "4.0.0-canary.39",
     "@types/node": "^24.10.1",
@@ -41,7 +76,6 @@
     "react-dom": "19.3.0",
     "react-router": "8.4.0",
     "typescript": "^5.9.3",
-    "vite": "^8.0.3",
-    "@payloadcms/graphql": "4.0.0-canary.39"
+    "vite": "^8.0.3"
   }
 }

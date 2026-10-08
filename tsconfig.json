@@ -1,34 +1,24 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ES2023"
-    ],
+    "target": "ES2023",
+    "lib": ["DOM", "DOM.Iterable", "ES2023"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
     "jsx": "react-jsx",
-    "types": [
-      "node",
-      "vite/client"
-    ],
+    "types": ["node", "vite/client"],
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
     "noEmit": true,
-    "paths": {
-      "react": [
-        "./node_modules/@types/react"
-      ],
-      "react/*": [
-        "./node_modules/@types/react/*"
-      ],
-      "react-dom": [
-        "./node_modules/@types/react-dom"
-      ],
-      "react-dom/*": [
-        "./node_modules/@types/react-dom/*"
-      ]
-    }
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
   },
-  "include": [
-    "src",
-    "test"
-  ]
+  "include": ["src", "test"]
 }
