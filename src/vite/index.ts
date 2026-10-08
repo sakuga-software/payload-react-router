@@ -15,6 +15,7 @@ import { clientModuleResolution } from './workarounds/clientModuleResolution.ts'
 import { reactDomServerInRsc } from './workarounds/reactDomServerInRsc.ts'
 import { ssrStripDistStyleImports } from './workarounds/stripDistStyleImports.ts'
 import { stubPrettierInClient } from './workarounds/stubPrettierInClient.ts'
+import { terminateLastLineInRsc } from './workarounds/terminateLastLineInRsc.ts'
 import { wrapCjsForClient } from './workarounds/wrapCjsForClient.ts'
 
 export type PayloadVitePluginOptions = {
@@ -176,6 +177,7 @@ export function payload(options: PayloadVitePluginOptions): PluginOption[] {
     ssrStripDistStyleImports(),
     reactDomServerInRsc(),
     stubPrettierInClient(),
+    terminateLastLineInRsc(),
     processInClient(),
     payloadDevConfigReload({ payloadConfigPath }),
   ]

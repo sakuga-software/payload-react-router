@@ -49,3 +49,19 @@ test('client transform inlines public env vars and neutralises the rest', () => 
   assert.equal(run('rsc', 'process.env.SECRET'), undefined)
   assert.equal(run('client', 'nothing here'), undefined)
 })
+
+test('RSC transform ends a module without a final newline with one', () => {
+  const transform = byName('payload:terminate-last-line-in-rsc').transform as (
+    this: unknown,
+    code: string,
+    id: string,
+  ) => { code: string } | undefined
+  const run = (env: string, code: string, id = '/node_modules/@payloadcms/ui/dist/templates/Minimal/index.js') =>
+    transform.call({ environment: { name: env } }, code, id)
+
+  const code = 'export const A = () => null;\n//# sourceMappingURL=index.js.map'
+  assert.equal(run('rsc', code)?.code, `${code}\n`)
+  assert.equal(run('rsc', `${code}\n`), undefined)
+  assert.equal(run('client', code), undefined)
+  assert.equal(run('rsc', code, '/node_modules/@payloadcms/ui/dist/templates/Minimal/index.css'), undefined)
+})
