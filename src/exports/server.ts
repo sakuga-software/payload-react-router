@@ -9,10 +9,10 @@ export { PayloadAdminLayout, type PayloadAdminLayoutProps } from '../server/layo
 export { payloadMiddleware } from '../server/middleware.ts'
 export { getRequest } from '../server/requestStore.ts'
 export { createAPIRoute, handleAPIRoute } from '../server/rest.ts'
+export { serializeCookie } from '../server/cookies.ts'
 export {
   createPageRenderServerAdapter,
   type PageNavIntent,
   reactRouterServerAdapter,
-  serializeCookie,
 } from '../server/serverAdapter.ts'
 export { handleServerFunctions } from '../server/serverFunctions.ts'

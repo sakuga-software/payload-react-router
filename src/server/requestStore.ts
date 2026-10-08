@@ -1,5 +1,7 @@
 import { AsyncLocalStorage } from 'node:async_hooks'
-import { unstable_getRequest as getRouterRequest } from 'react-router'
+// Namespace import: `unstable_getRequest` only exists in React Router's
+// `react-server` build, and a named import would fail to link elsewhere.
+import * as ReactRouter from 'react-router'
 
 /**
  * Per-request state shared by every Payload adapter call made while React Router
@@ -47,10 +49,13 @@ export function getRequestStore(): PayloadRequestStore {
     return store
   }
 
-  let request: Request
+  let request: Request | undefined
   try {
-    request = getRouterRequest()
+    request = (ReactRouter as { unstable_getRequest?: () => Request }).unstable_getRequest?.()
   } catch {
+    request = undefined
+  }
+  if (!request) {
     throw new Error(
       'payload-react-router: no request in scope. Add `payloadMiddleware` to the `middleware` export of app/root.tsx.',
     )

@@ -1,8 +1,9 @@
-import type { CookieOptions, CookieStore, ServerAdapter } from 'payload'
+import type { CookieStore, ServerAdapter } from 'payload'
 
 import { parseCookies } from 'payload'
 import { redirect } from 'react-router'
 
+import { serializeCookie } from './cookies.ts'
 import { getRequest, getRequestStore } from './requestStore.ts'
 
 function buildCookieStore(headers: Headers): CookieStore {
@@ -15,34 +16,6 @@ function buildCookieStore(headers: Headers): CookieStore {
     },
     getAll: () => Array.from(cookies.entries()).map(([name, value]) => ({ name, value })),
   }
-}
-
-export function serializeCookie(name: string, value: string, options: CookieOptions = {}): string {
-  let cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`
-
-  if (options.path) {
-    cookie += `; Path=${options.path}`
-  }
-  if (options.domain) {
-    cookie += `; Domain=${options.domain}`
-  }
-  if (options.maxAge !== undefined) {
-    cookie += `; Max-Age=${Math.floor(options.maxAge)}`
-  }
-  if (options.expires) {
-    cookie += `; Expires=${options.expires.toUTCString()}`
-  }
-  if (options.httpOnly) {
-    cookie += '; HttpOnly'
-  }
-  if (options.secure) {
-    cookie += '; Secure'
-  }
-  if (options.sameSite) {
-    cookie += `; SameSite=${options.sameSite.charAt(0).toUpperCase()}${options.sameSite.slice(1)}`
-  }
-
-  return cookie
 }
 
 /**

@@ -7,6 +7,7 @@ import { data, redirect } from 'react-router'
 import type { PageNavIntent } from './serverAdapter.ts'
 
 import { getRequestI18n, initAdminContext } from './initAdminContext.ts'
+import { toSearchParams } from './searchParams.ts'
 import { createPageRenderServerAdapter } from './serverAdapter.ts'
 
 export type LoadAdminPageArgs = {
@@ -27,17 +28,6 @@ export type AdminPageData = {
 export type AdminPageMeta = {
   description?: string
   title?: string
-}
-
-type SearchParams = Record<string, string | string[]>
-
-function toSearchParams(url: URL): SearchParams {
-  const result: SearchParams = {}
-  for (const key of new Set(url.searchParams.keys())) {
-    const values = url.searchParams.getAll(key)
-    result[key] = values.length > 1 ? values : values[0]!
-  }
-  return result
 }
 
 /**
