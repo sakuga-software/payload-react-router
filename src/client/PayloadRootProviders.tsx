@@ -5,7 +5,7 @@ import type { ServerFunctionClient, ServerFunctionClientArgs } from 'payload'
 import type { ReactNode } from 'react'
 
 import { RootProviders } from '@payloadcms/ui'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 
 import { ReactRouterAdapter } from './RouterAdapter.tsx'
 
@@ -41,12 +41,23 @@ export type PayloadRootProvidersProps = {
   serverFunction: PayloadServerFunction
 }
 
+declare global {
+  interface Window {
+    /** Set once the admin has hydrated. End-to-end tests wait for it before interacting. */
+    __PAYLOAD_ADMIN_HYDRATED__?: boolean
+  }
+}
+
 /** Payload's `RootProviders`, bound to React Router. Rendered by `PayloadAdminLayout`. */
 export function PayloadRootProviders({ children, data, serverFunction }: PayloadRootProvidersProps) {
   const callServerFunction = useCallback<ServerFunctionClient>(
     (args) => serverFunction(args, skipRevalidation()),
     [serverFunction],
   )
+
+  useEffect(() => {
+    window.__PAYLOAD_ADMIN_HYDRATED__ = true
+  }, [])
 
   return (
     <RootProviders data={data} RouterAdapter={ReactRouterAdapter} serverFunction={callServerFunction}>

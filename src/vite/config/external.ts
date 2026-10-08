@@ -96,6 +96,9 @@ export const payloadNoExternalPatterns: Array<RegExp | string> = [
   '@payloadcms/ui',
   '@payloadcms/translations',
   'payload-react-router',
+  // Imported by the adapter's GraphQL handler; bundled so the server build does
+  // not need it next to the app's own dependencies.
+  'graphql-http',
   /^@payloadcms\/richtext-lexical/,
   /^@payloadcms\/plugin-/,
   /^@payloadcms\/storage-/,
