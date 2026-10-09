@@ -9,14 +9,9 @@ Payload `4.0.0-canary.39` · React Router `8.4.0` (RSC Framework Mode) · `@vite
 | --- | --- | --- |
 | **Adapter bench**: 36 Playwright tests on [`demo/`](../demo) | this repo, CI job `e2e` | ✅ run, both modes |
 | Adapter unit tests: 15 `node:test` cases, `test/` | this repo, CI job `checks` | ✅ run |
-| **Payload's own e2e suites** (`test/*/e2e.spec.ts`, as the TanStack adapter runs them) | Payload monorepo only | ❌ **not run** |
+| **Payload's own e2e suites**: `auth`, `versions`, `admin` (general, document, list), 21 `fields` sub-suites | local fork of the Payload monorepo at `v4.0.0-canary.39`, `PAYLOAD_FRAMEWORK=react-router` | ✅ run, dev mode, compared with Next.js |
 
-Payload's suites boot their own test configs through `test/dev.ts` and choose the framework
-with `PAYLOAD_FRAMEWORK` (`next` / `tanstack-start`). Wiring React Router into them means
-editing `test/`, the CLI's framework detection and the CI matrix inside a fork of
-`payloadcms/payload` (NOTES.md §3, decision D2). This work was done outside that monorepo, so the
-per-suite pass rates against Next and TanStack that the brief asked for **have not been
-measured**. The tables below compare scenarios, not suite pass rates.
+See [Payload's own e2e suites](#payloads-own-e2e-suites) below for those results.
 
 ## Adapter bench results
 
@@ -68,6 +63,40 @@ One difference between modes is expected and asserted: under `vite dev`, Vite's 
 middleware answers `OPTIONS` (204) before React Router sees it; in production Payload answers
 (200).
 
+## Payload's own e2e suites
+
+Run on 2026-10-09 in a local fork of `payloadcms/payload` at `v4.0.0-canary.39`. The adapter is
+added as `packages/react-router`, with a `test/app-react-router` app and
+`PAYLOAD_FRAMEWORK=react-router` wired into `test/dev.ts`, the import map generation and the
+Playwright hydration wait. Same machine and database (SQLite) for both frameworks, `vite dev` /
+`next dev`, test server on a port of its own.
+
+| Suite | React Router | Next.js | Fails on React Router only |
+| --- | :-: | :-: | --- |
+| `auth` | 13 / 15 | 14 / 15 | 1, passes 2/2 alone (first test, cold server) |
+| `versions` | 120 / 127 | 123 / 127 | 4: 3 pass alone; 1 real (rich text diffs), fixed |
+| `admin` general | 86 / 96 | 95 / 96 | 10: 8 metadata, fixed (17/18 after the fix); 2 pass alone |
+| `admin` document view | 59 / 63 | 62 / 63 | 3, all pass 2/2 alone |
+| `admin` list view | 87 / 99 | 89 / 99 | 3, all pass 2/2 alone |
+| `fields` (21 sub-suites) | 285 / 291 | same failures on the 4 compared sub-suites | 1, passes 2/2 alone |
+
+Failures shared with Next.js come from the suites themselves on SQLite (search, geo filters,
+some block and filter cases). Tests that fail in a full run but pass alone are mostly the Vite
+dev server's HMR WebSocket dropping mid-run, which the harness counts as a console error; this
+one is React Router dev only and is not explained yet.
+
+Defects found and fixed in the adapter (version 0.1.2):
+
+- dev-only "unique key" warnings after the admin view render (6 `auth` tests);
+- `process is not defined` in browser dependencies that Vite pre-bundles (every `fields` test);
+- robots, Open Graph, Twitter and icon tags missing from admin pages (8 `admin` tests);
+- version-diff converters broken inside the Payload monorepo, where the CSS-strip pattern did not
+  match `/packages/<pkg>/src/` paths (rich text diffs).
+
+The runs also found a crash in React Router itself (an aborted document request can stop the
+server process in RSC mode). It is reported privately to the React Router team; the runs above
+use a local patch for it.
+
 ## Server functions are public endpoints (NOTES P9)
 
 In React Router's RSC mode, a `'use server'` function is an endpoint that a POST to **any**
@@ -96,7 +125,6 @@ session returned data or wrote to the database. Scenario 27 keeps this checked i
 | S3 uploads | needs an S3 endpoint; untested |
 | Postgres | only SQLite was run |
 | Permissions beyond admin / anonymous | the demo has a `role` field but no role-based rules |
-| Payload's own e2e suites (auth, fields, collections, versions, uploads) | see above |
 
 ## Scenarios TanStack skips, checked here
 
