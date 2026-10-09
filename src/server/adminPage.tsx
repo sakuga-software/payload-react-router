@@ -1,15 +1,20 @@
 import type { ImportMap, SanitizedConfig } from 'payload'
 import type { ReactNode } from 'react'
 
+import { Fragment } from 'react'
+
 import { createFromReadableStream, renderToReadableStream } from '@vitejs/plugin-rsc/rsc'
 import { data, redirect } from 'react-router'
 
 import type { PageNavIntent } from './serverAdapter.ts'
 
+export type { AdminPageMeta } from './metadata.ts'
+
 import { getRequestI18n, initAdminContext } from './initAdminContext.ts'
 import { toSearchParams } from './searchParams.ts'
 import { createPageRenderServerAdapter } from './serverAdapter.ts'
 import { markKeysValidated } from './markKeysValidated.ts'
+import { type AdminPageMeta, toAdminPageMeta } from './metadata.ts'
 
 export type LoadAdminPageArgs = {
   config: Promise<SanitizedConfig> | SanitizedConfig
@@ -26,10 +31,6 @@ export type AdminPageData = {
   page: ReactNode
 }
 
-export type AdminPageMeta = {
-  description?: string
-  title?: string
-}
 
 /**
  * Serializes `node` to a Flight stream and reads it to the end, then decodes it
@@ -157,19 +158,6 @@ export async function loadAdminPage({
   return { meta: toAdminPageMeta(metadata), page }
 }
 
-function toAdminPageMeta(metadata: { description?: unknown; title?: unknown }): AdminPageMeta {
-  const title =
-    typeof metadata.title === 'string'
-      ? metadata.title
-      : metadata.title && typeof metadata.title === 'object' && 'absolute' in metadata.title
-        ? String((metadata.title as { absolute: unknown }).absolute)
-        : undefined
-
-  return {
-    description: typeof metadata.description === 'string' ? metadata.description : undefined,
-    title,
-  }
-}
 
 /**
  * Renders a page loaded by {@link loadAdminPage}, with its `<title>` hoisted by React.
@@ -180,10 +168,40 @@ function toAdminPageMeta(metadata: { description?: unknown; title?: unknown }): 
  * intact and can be passed straight through: `<AdminPage {...loaderData} />`.
  */
 export function AdminPage({ meta, page }: { meta: AdminPageMeta; page: unknown }) {
+  const og = meta.openGraph
+  // Twitter tags come from OpenGraph, as in Next.js metadata resolution.
+  const twitterImage = og?.images?.[0]
   return (
     <>
       {meta.title ? <title>{meta.title}</title> : null}
       {meta.description ? <meta content={meta.description} name="description" /> : null}
+      {meta.keywords ? <meta content={meta.keywords} name="keywords" /> : null}
+      {meta.robots ? <meta content={meta.robots} name="robots" /> : null}
+      {og?.title ? <meta content={og.title} property="og:title" /> : null}
+      {og?.description ? <meta content={og.description} property="og:description" /> : null}
+      {og?.siteName ? <meta content={og.siteName} property="og:site_name" /> : null}
+      {og?.images?.map((image) => (
+        <Fragment key={image.url}>
+          <meta content={image.url} property="og:image" />
+          {image.width ? <meta content={String(image.width)} property="og:image:width" /> : null}
+          {image.height ? <meta content={String(image.height)} property="og:image:height" /> : null}
+          {image.alt ? <meta content={image.alt} property="og:image:alt" /> : null}
+        </Fragment>
+      ))}
+      {twitterImage ? <meta content="summary_large_image" name="twitter:card" /> : null}
+      {twitterImage ? <meta content={twitterImage.url} name="twitter:image" /> : null}
+      {og?.title ? <meta content={og.title} name="twitter:title" /> : null}
+      {og?.description ? <meta content={og.description} name="twitter:description" /> : null}
+      {meta.icons?.map((icon) => (
+        <link
+          href={icon.url}
+          key={`${icon.rel}:${icon.url}:${icon.media ?? ''}`}
+          media={icon.media}
+          rel={icon.rel}
+          sizes={icon.sizes}
+          type={icon.type}
+        />
+      ))}
       {page as ReactNode}
     </>
   )

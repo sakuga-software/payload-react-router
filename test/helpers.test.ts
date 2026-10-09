@@ -73,3 +73,25 @@ test('markKeysValidated sets the dev validation flag through arrays and resolved
   assert.equal(inArray._store.validated, 1)
   assert.equal(inLazy._store.validated, 1)
 })
+
+test('toAdminPageMeta keeps robots, keywords, Open Graph images and icons', async () => {
+  const { toAdminPageMeta } = await import('../src/server/metadata.ts')
+  const meta = toAdminPageMeta({
+    description: 'Admin',
+    icons: [
+      { rel: 'icon', type: 'image/png', url: '/favicon-dark.png' },
+      { media: '(prefers-color-scheme: dark)', rel: 'icon', url: '/favicon-light.png' },
+    ],
+    keywords: ['payload', 'cms'],
+    openGraph: { description: 'OG description', images: [{ url: '/api/og?title=x' }], title: 'OG title' },
+    robots: 'noindex, nofollow',
+    title: { absolute: 'Dashboard - Payload' },
+  } as Parameters<typeof toAdminPageMeta>[0])
+
+  assert.equal(meta.title, 'Dashboard - Payload')
+  assert.equal(meta.robots, 'noindex, nofollow')
+  assert.equal(meta.keywords, 'payload, cms')
+  assert.deepEqual(meta.openGraph?.images, [{ alt: undefined, height: undefined, url: '/api/og?title=x', width: undefined }])
+  assert.equal(meta.icons?.length, 2)
+  assert.equal(meta.icons?.[1]?.media, '(prefers-color-scheme: dark)')
+})
