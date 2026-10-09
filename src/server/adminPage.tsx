@@ -9,6 +9,7 @@ import type { PageNavIntent } from './serverAdapter.ts'
 import { getRequestI18n, initAdminContext } from './initAdminContext.ts'
 import { toSearchParams } from './searchParams.ts'
 import { createPageRenderServerAdapter } from './serverAdapter.ts'
+import { markKeysValidated } from './markKeysValidated.ts'
 
 export type LoadAdminPageArgs = {
   config: Promise<SanitizedConfig> | SanitizedConfig
@@ -45,8 +46,13 @@ export type AdminPageMeta = {
  */
 async function renderToCompletion(node: ReactNode): Promise<ReactNode> {
   const buffer = await new Response(renderToReadableStream(node)).arrayBuffer()
-  return createFromReadableStream<ReactNode>(new Response(buffer).body!)
+  const tree = await createFromReadableStream<ReactNode>(new Response(buffer).body!)
+  if (process.env.NODE_ENV !== 'production') {
+    markKeysValidated(tree)
+  }
+  return tree
 }
+
 
 /**
  * Loads one admin page for the `admin/*` splat route. Call it from the route

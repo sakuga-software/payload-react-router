@@ -52,3 +52,24 @@ test('cookies: every Payload CookieOptions field is serialized', () => {
   )
   assert.equal(serializeCookie('a b', 'c;d'), 'a%20b=c%3Bd')
 })
+
+test('markKeysValidated sets the dev validation flag through arrays and resolved lazy nodes', async () => {
+  const { markKeysValidated } = await import('../src/server/markKeysValidated.ts')
+  const element = Symbol.for('react.transitional.element')
+  const leaf = () => ({ $$typeof: element, _store: { validated: 0 }, props: {} })
+  const inArray = leaf()
+  const inLazy = leaf()
+  const tree = {
+    $$typeof: element,
+    _store: { validated: 1 },
+    props: {
+      children: [
+        inArray,
+        { $$typeof: Symbol.for('react.lazy'), _payload: { status: 'fulfilled', value: [inLazy] } },
+      ],
+    },
+  }
+  markKeysValidated(tree)
+  assert.equal(inArray._store.validated, 1)
+  assert.equal(inLazy._store.validated, 1)
+})
