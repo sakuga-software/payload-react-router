@@ -7,7 +7,7 @@ Payload `4.0.0-canary.39` · React Router `8.4.0` (RSC Framework Mode) · `@vite
 
 | Bench | Where | Status |
 | --- | --- | --- |
-| **Adapter bench**: 35 Playwright tests on [`demo/`](../demo) | this repo, CI job `e2e` | ✅ run, both modes |
+| **Adapter bench**: 36 Playwright tests on [`demo/`](../demo) | this repo, CI job `e2e` | ✅ run, both modes |
 | Adapter unit tests: 15 `node:test` cases, `test/` | this repo, CI job `checks` | ✅ run |
 | **Payload's own e2e suites** (`test/*/e2e.spec.ts`, as the TanStack adapter runs them) | Payload monorepo only | ❌ **not run** |
 
@@ -22,8 +22,8 @@ measured**. The tables below compare scenarios, not suite pass rates.
 
 | Mode | Command | Result | Duration |
 | --- | --- | --- | --- |
-| production | `react-router build` + `react-router-serve` | **35 / 35** | 19 s |
-| development | `vite dev` | **35 / 35** | 35 s |
+| production | `react-router build` + `react-router-serve` | **36 / 36** | 19 s |
+| development | `vite dev` | **36 / 36** | 36 s |
 
 Each run starts on an empty SQLite database. In production the schema comes from the
 committed migrations (`prodMigrations`); in development it is pushed.
@@ -56,7 +56,8 @@ committed migrations (`prodMigrations`); in development it is pushed.
 | 24 | validation | call-to-action links: site path or http(s) only (`javascript:`, `//host`, `/\host` refused) | ✅ | ✅ |
 | 25 | validation | page slugs: kebab-case, not `admin`, `api` or `posts` | ✅ | ✅ |
 | 26 | website | nav lists every published page, past Payload's default limit of 10 | ✅ | ✅ |
-| 27–35 | REST / GraphQL | paginated find; login `Set-Cookie` (HttpOnly) + `/me` + logout; access control for anonymous reads; create/update/delete; 400 validation; 404 unknown route; globals + `?locale`; GraphQL query; CORS preflight | ✅ | ✅ |
+| 27 | security (P9) | data server functions called from a public route without a session return no data; the same call with a session does | ✅ | ✅ |
+| 28–36 | REST / GraphQL | paginated find; login `Set-Cookie` (HttpOnly) + `/me` + logout; access control for anonymous reads; create/update/delete; 400 validation; 404 unknown route; globals + `?locale`; GraphQL query; CORS preflight | ✅ | ✅ |
 
 The REST/GraphQL assertions check Payload's own response contract (`handleEndpoints` and
 the GraphQL handler are the same code Next.js and TanStack call). There is no Next app in this
@@ -66,6 +67,27 @@ side-by-side run.
 One difference between modes is expected and asserted: under `vite dev`, Vite's own CORS
 middleware answers `OPTIONS` (204) before React Router sees it; in production Payload answers
 (200).
+
+## Server functions are public endpoints (NOTES P9)
+
+In React Router's RSC mode, a `'use server'` function is an endpoint that a POST to **any**
+route can call with its `rsc-action-id`. Route middleware and loaders do not run before it, so
+the adapter cannot gate it, and should not: `switch-language` and the create-first-user form
+state must work without a session. Next.js server actions are public in the same way.
+
+Checked on 2026-10-09 against the production build: each of Payload's 15 server functions was
+called with a session and without one, on an admin route, on the website home `/` and on a
+404 route, with a draft page that holds a secret.
+
+| Function | Without a session |
+| --- | --- |
+| `form-state`, `table-state` | refused by Payload: "Unauthorized, you must be logged in" |
+| `render-document`, `render-document-slots`, `render-list`, `render-field`, `render-tab`, `render-widget`, `get-dashboard-documents`, `get-default-layout`, `get-upcoming-scheduled-publish`, `copy-data-from-locale`, `schedule-publish`, `slugify` | throws before it returns data |
+| `switch-language` | runs, by design: it sets the `payload-lng` cookie for the login page |
+
+With a session, `render-document`, `render-list`, `table-state` and `copy-data-from-locale`
+returned the draft from `/`, which proves that the calls were well formed. No call without a
+session returned data or wrote to the database. Scenario 27 keeps this checked in CI.
 
 ## Not covered
 
