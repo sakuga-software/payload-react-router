@@ -1,0 +1,4 @@
+/media/*
+!/media/.gitkeep
+/test-results/
+/playwright-report/

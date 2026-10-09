@@ -1,0 +1,14 @@
+body { font-family: system-ui, sans-serif; margin: 0; color: #1a1a1a; }
+.site-header { display: flex; gap: 1rem; align-items: baseline; padding: 1rem 2rem; border-bottom: 1px solid #e5e5e5; }
+.site-header > a:last-child { margin-left: auto; }
+.site-main { max-width: 42rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; }
+.post-list { list-style: none; padding: 0; }
+.post-list li { margin-bottom: 1.5rem; }
+.site-nav { display: flex; gap: 1rem; }
+.page img { max-width: 100%; height: auto; }
+.block-hero { padding: 2rem 0; }
+.block-hero h1 { font-size: 2.5rem; margin: 0 0 0.5rem; }
+.block-media-text { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: center; margin: 2rem 0; }
+.block-media-text--right img { order: 2; }
+.block-cta { margin: 2rem 0; padding: 1.5rem; border-radius: 8px; background: #f3f4f6; }
+.block-cta a { display: inline-block; padding: 0.5rem 1rem; border-radius: 6px; background: #1a1a1a; color: #fff; text-decoration: none; }

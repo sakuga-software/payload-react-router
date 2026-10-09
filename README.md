@@ -18,11 +18,17 @@ view and layout adapters, server functions); `@payloadcms/ui` is used unmodified
 | Vite | `8.x` |
 | Node.js | `>= 24.15` (Payload 4) |
 
-The adapter is exercised by a demo app: SQLite, Lexical, drafts + autosave, uploads, two
-locales, a global, and a website that reads content through the Local API. A 26-test Playwright
-bench runs on that app against both the production build and `vite dev`, with the adapter
-installed from the packed tarball. The demo app is in a private repository for now; the
-scenarios and results are in [`docs/COMPAT.md`](./docs/COMPAT.md).
+A complete demo app lives in [`demo/`](./demo): SQLite, Lexical, drafts and autosave, page
+blocks with live preview, uploads, two locales, a global, and a website that reads content
+through the Local API. A 35-test Playwright bench runs on it in CI against both the production
+build and `vite dev`. Scenarios and results are in [`docs/COMPAT.md`](./docs/COMPAT.md).
+
+```bash
+pnpm install
+pnpm demo:dev        # http://localhost:3000/admin
+pnpm demo:build && pnpm test:e2e              # bench on the production build
+E2E_MODE=dev pnpm test:e2e                    # bench on vite dev
+```
 
 ## Adding Payload to a React Router app
 
@@ -261,4 +267,4 @@ A plain "SSR + loaders" React Router app cannot host the admin without changing
 - The Payload CLI does not detect React Router: use `importMapFile` and `PAYLOAD_CONFIG_PATH`.
 - Each admin page is rendered to completion on the server before streaming starts (needed
   to turn in-view redirects into real redirects; TanStack does the same).
-- Live preview and cloud storage adapters are not covered by the bench yet.
+- Cloud storage adapters (S3, R2, Azure, GCS) and Postgres are not covered by the bench yet.

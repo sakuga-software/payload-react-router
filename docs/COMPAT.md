@@ -1,13 +1,13 @@
 # Compatibility report — `payload-react-router`
 
 Payload `4.0.0-canary.39` · React Router `8.4.0` (RSC Framework Mode) · `@vitejs/plugin-rsc` `0.5.35`
-· React `19.3.0` · Node `24.21` · SQLite. Measured on 2026-10-08.
+· React `19.3.0` · Node `24` · SQLite. Measured on 2026-10-08, updated on 2026-10-09 (adapter `0.1.1`).
 
 ## What was run, and what was not
 
 | Bench | Where | Status |
 | --- | --- | --- |
-| **Adapter bench**: 26 Playwright tests on the demo app | demo app repository (private), CI job `payload-e2e` | ✅ run, both modes |
+| **Adapter bench**: 35 Playwright tests on [`demo/`](../demo) | this repo, CI job `e2e` | ✅ run, both modes |
 | Adapter unit tests: 15 `node:test` cases, `test/` | this repo, CI job `checks` | ✅ run |
 | **Payload's own e2e suites** (`test/*/e2e.spec.ts`, as the TanStack adapter runs them) | Payload monorepo only | ❌ **not run** |
 
@@ -22,8 +22,8 @@ measured**. The tables below compare scenarios, not suite pass rates.
 
 | Mode | Command | Result | Duration |
 | --- | --- | --- | --- |
-| production | `react-router build` + `react-router-serve` | **26 / 26** | 32 s |
-| development | `vite dev` | **26 / 26** | 1 min 42 s (cold optimizer) |
+| production | `react-router build` + `react-router-serve` | **35 / 35** | 19 s |
+| development | `vite dev` | **35 / 35** | 35 s |
 
 Each run starts on an empty SQLite database. In production the schema comes from the
 committed migrations (`prodMigrations`); in development it is pushed.
@@ -47,7 +47,16 @@ committed migrations (`prodMigrations`); in development it is pushed.
 | 15 | globals | edit a global; the website shows it | ✅ | ✅ |
 | 16 | relations | set a relationship from the admin | ✅ | ✅ |
 | 17 | headless / Local API | website loaders list published posts; drafts are hidden and 404 | ✅ | ✅ |
-| 18–26 | REST / GraphQL | paginated find; login `Set-Cookie` (HttpOnly) + `/me` + logout; access control for anonymous reads; create/update/delete; 400 validation; 404 unknown route; globals + `?locale`; GraphQL query; CORS preflight | ✅ | ✅ |
+| 18 | admin styles (adapter `0.1.1`) | login and first-user templates, nav: their CSS is loaded in production; fails on `0.1.0` | ✅ | ✅ |
+| 19 | admin styles | dashboard: default template and nav CSS loaded | ✅ | ✅ |
+| 20 | blocks | build a page from blocks in the admin, publish, anonymous visitor reads it | ✅ | ✅ |
+| 21 | live preview | page: unsaved block edits show in the preview iframe while typing | ✅ | ✅ |
+| 22 | live preview | post: unsaved title shows in the preview iframe while typing | ✅ | ✅ |
+| 23 | drafts | a draft page is 404 for an anonymous reader and visible when signed in | ✅ | ✅ |
+| 24 | validation | call-to-action links: site path or http(s) only (`javascript:`, `//host`, `/\host` refused) | ✅ | ✅ |
+| 25 | validation | page slugs: kebab-case, not `admin`, `api` or `posts` | ✅ | ✅ |
+| 26 | website | nav lists every published page, past Payload's default limit of 10 | ✅ | ✅ |
+| 27–35 | REST / GraphQL | paginated find; login `Set-Cookie` (HttpOnly) + `/me` + logout; access control for anonymous reads; create/update/delete; 400 validation; 404 unknown route; globals + `?locale`; GraphQL query; CORS preflight | ✅ | ✅ |
 
 The REST/GraphQL assertions check Payload's own response contract (`handleEndpoints` and
 the GraphQL handler are the same code Next.js and TanStack call). There is no Next app in this
@@ -63,7 +72,6 @@ middleware answers `OPTIONS` (204) before React Router sees it; in production Pa
 | Area (brief §3) | Why |
 | --- | --- |
 | S3 uploads | needs an S3 endpoint; untested |
-| Live preview | not configured in the demo |
 | Postgres | only SQLite was run |
 | Permissions beyond admin / anonymous | the demo has a `role` field but no role-based rules |
 | Payload's own e2e suites (auth, fields, collections, versions, uploads) | see above |
