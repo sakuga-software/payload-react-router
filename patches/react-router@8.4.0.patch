@@ -1,0 +1,162 @@
+diff --git a/dist/development/lib/rsc/html-stream/server.js b/dist/development/lib/rsc/html-stream/server.js
+index 326e0ea1136babf7a9ed03bb59087140069758bf..6804d2a45649ed37a2821b2aeb2efb37423e570e 100644
+--- a/dist/development/lib/rsc/html-stream/server.js
++++ b/dist/development/lib/rsc/html-stream/server.js
+@@ -21,11 +21,31 @@ function injectRSCPayload(rscStream, { nonce } = {}) {
+ 	let rscReader = null;
+ 	let buffered = [];
+ 	let timeout = null;
++	async function stop(reason) {
++		cancelled = true;
++		if (timeout) {
++			clearTimeout(timeout);
++			timeout = null;
++		}
++		buffered.length = 0;
++		if (rscReader) await rscReader.cancel(reason).catch(() => {});
++		else await rscStream.cancel(reason).catch(() => {});
++		resolveFlightDataPromise();
++	}
++	function tryEnqueue(controller, chunk) {
++		try {
++			controller.enqueue(chunk);
++			return true;
++		} catch (error) {
++			stop(error);
++			return false;
++		}
++	}
+ 	function flushBufferedChunks(controller) {
+ 		for (let chunk of buffered) {
+ 			let buf = decoder.decode(chunk, { stream: true });
+ 			if (buf.endsWith(trailer)) buf = buf.slice(0, -14);
+-			controller.enqueue(encoder.encode(buf));
++			if (!tryEnqueue(controller, encoder.encode(buf))) return;
+ 		}
+ 		buffered.length = 0;
+ 		timeout = null;
+@@ -37,31 +57,32 @@ function injectRSCPayload(rscStream, { nonce } = {}) {
+ 			timeout = setTimeout(async () => {
+ 				if (cancelled) return;
+ 				flushBufferedChunks(controller);
++				if (cancelled) return;
+ 				if (!startedRSC) {
+ 					startedRSC = true;
+ 					rscReader = rscStream.getReader();
+-					writeRSCStream(rscReader, controller, () => cancelled, nonce).catch((err) => controller.error(err)).then(resolveFlightDataPromise);
++					writeRSCStream(rscReader, controller, () => cancelled, nonce).catch((err) => {
++						if (cancelled) return;
++						try {
++							controller.error(err);
++						} catch (error) {
++							return stop(error);
++						}
++					}).then(resolveFlightDataPromise);
+ 				}
+ 			}, 0);
+ 		},
+ 		async flush(controller) {
+ 			await flightDataPromise;
++			if (cancelled) return;
+ 			if (timeout) {
+ 				clearTimeout(timeout);
+ 				flushBufferedChunks(controller);
+ 			}
+-			controller.enqueue(encoder.encode("</body></html>"));
++			tryEnqueue(controller, encoder.encode("</body></html>"));
+ 		},
+ 		async cancel(reason) {
+-			cancelled = true;
+-			if (timeout) {
+-				clearTimeout(timeout);
+-				timeout = null;
+-			}
+-			buffered.length = 0;
+-			if (rscReader) await rscReader.cancel(reason).catch(() => {});
+-			else await rscStream.cancel(reason).catch(() => {});
+-			resolveFlightDataPromise();
++			await stop(reason);
+ 		}
+ 	});
+ }
+diff --git a/dist/production/lib/rsc/html-stream/server.js b/dist/production/lib/rsc/html-stream/server.js
+index 326e0ea1136babf7a9ed03bb59087140069758bf..6804d2a45649ed37a2821b2aeb2efb37423e570e 100644
+--- a/dist/production/lib/rsc/html-stream/server.js
++++ b/dist/production/lib/rsc/html-stream/server.js
+@@ -21,11 +21,31 @@ function injectRSCPayload(rscStream, { nonce } = {}) {
+ 	let rscReader = null;
+ 	let buffered = [];
+ 	let timeout = null;
++	async function stop(reason) {
++		cancelled = true;
++		if (timeout) {
++			clearTimeout(timeout);
++			timeout = null;
++		}
++		buffered.length = 0;
++		if (rscReader) await rscReader.cancel(reason).catch(() => {});
++		else await rscStream.cancel(reason).catch(() => {});
++		resolveFlightDataPromise();
++	}
++	function tryEnqueue(controller, chunk) {
++		try {
++			controller.enqueue(chunk);
++			return true;
++		} catch (error) {
++			stop(error);
++			return false;
++		}
++	}
+ 	function flushBufferedChunks(controller) {
+ 		for (let chunk of buffered) {
+ 			let buf = decoder.decode(chunk, { stream: true });
+ 			if (buf.endsWith(trailer)) buf = buf.slice(0, -14);
+-			controller.enqueue(encoder.encode(buf));
++			if (!tryEnqueue(controller, encoder.encode(buf))) return;
+ 		}
+ 		buffered.length = 0;
+ 		timeout = null;
+@@ -37,31 +57,32 @@ function injectRSCPayload(rscStream, { nonce } = {}) {
+ 			timeout = setTimeout(async () => {
+ 				if (cancelled) return;
+ 				flushBufferedChunks(controller);
++				if (cancelled) return;
+ 				if (!startedRSC) {
+ 					startedRSC = true;
+ 					rscReader = rscStream.getReader();
+-					writeRSCStream(rscReader, controller, () => cancelled, nonce).catch((err) => controller.error(err)).then(resolveFlightDataPromise);
++					writeRSCStream(rscReader, controller, () => cancelled, nonce).catch((err) => {
++						if (cancelled) return;
++						try {
++							controller.error(err);
++						} catch (error) {
++							return stop(error);
++						}
++					}).then(resolveFlightDataPromise);
+ 				}
+ 			}, 0);
+ 		},
+ 		async flush(controller) {
+ 			await flightDataPromise;
++			if (cancelled) return;
+ 			if (timeout) {
+ 				clearTimeout(timeout);
+ 				flushBufferedChunks(controller);
+ 			}
+-			controller.enqueue(encoder.encode("</body></html>"));
++			tryEnqueue(controller, encoder.encode("</body></html>"));
+ 		},
+ 		async cancel(reason) {
+-			cancelled = true;
+-			if (timeout) {
+-				clearTimeout(timeout);
+-				timeout = null;
+-			}
+-			buffered.length = 0;
+-			if (rscReader) await rscReader.cancel(reason).catch(() => {});
+-			else await rscStream.cancel(reason).catch(() => {});
+-			resolveFlightDataPromise();
++			await stop(reason);
+ 		}
+ 	});
+ }
