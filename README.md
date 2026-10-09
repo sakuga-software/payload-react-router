@@ -42,6 +42,18 @@ pnpm add payload @payloadcms/ui @payloadcms/translations @payloadcms/graphql gra
 pnpm add -D @react-router/dev@8.4.0 @vitejs/plugin-rsc@0.5.35 vite sass-embedded
 ```
 
+**Patch `react-router` 8.4.0.** In RSC mode, a client that aborts a document request can stop
+the Node process (`TypeError: Invalid state: Unable to enqueue`,
+[remix-run/react-router#15611](https://github.com/remix-run/react-router/issues/15611)). Until a
+release contains [the fix](https://github.com/remix-run/react-router/pull/15612), copy
+[`patches/react-router@8.4.0.patch`](patches/react-router@8.4.0.patch) into your app and add it to
+`pnpm-workspace.yaml`:
+
+```yaml
+patchedDependencies:
+  react-router@8.4.0: patches/react-router@8.4.0.patch
+```
+
 ### 2. Switch the app to RSC Framework Mode
 
 ```ts
@@ -263,6 +275,8 @@ A plain "SSR + loaders" React Router app cannot host the admin without changing
 ## Known limitations
 
 - React Router RSC mode is `unstable_`; pin versions and re-run the bench on upgrades.
+- `react-router` 8.4.0 needs a patch, or an aborted request can stop the server: see
+  [Dependencies](#1-dependencies).
 - Mounting the admin at `/` (Payload's `admin-root` setup) is untested; TanStack skips it too.
 - The Payload CLI does not detect React Router: use `importMapFile` and `PAYLOAD_CONFIG_PATH`.
 - Each admin page is rendered to completion on the server before streaming starts (needed
