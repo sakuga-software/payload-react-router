@@ -65,3 +65,16 @@ test('RSC transform ends a module without a final newline with one', () => {
   assert.equal(run('client', code), undefined)
   assert.equal(run('rsc', code, '/node_modules/@payloadcms/ui/dist/templates/Minimal/index.css'), undefined)
 })
+
+test('the browser dependency optimizer replaces process.env, the server ones do not', () => {
+  const config = callConfig('serve')
+  const plugins = config.environments!.client!.optimizeDeps!.rolldownOptions!.plugins as unknown as {
+    transform: (code: string) => { code: string } | undefined
+  }[]
+  assert.equal(
+    plugins[0]!.transform('var b = process.env.__NEXT_ROUTER_BASEPATH || ""')?.code,
+    'var b = undefined || ""',
+  )
+  assert.equal(config.environments!.rsc!.optimizeDeps, undefined)
+  assert.equal(config.environments!.ssr!.optimizeDeps, undefined)
+})
