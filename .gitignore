@@ -4,3 +4,7 @@ dist/
 *.tsbuildinfo
 *.log
 .DS_Store
+demo/build/
+demo/.react-router/
+demo/*.db
+demo/*.db-*

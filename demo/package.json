@@ -1,0 +1,44 @@
+{
+  "name": "payload-react-router-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "react-router dev --port 3000 --strictPort",
+    "build": "react-router build",
+    "start": "PORT=3000 react-router-serve ./build/server/index.js",
+    "typecheck": "react-router typegen && tsc",
+    "generate:importmap": "PAYLOAD_CONFIG_PATH=./payload.config.ts payload generate:importmap",
+    "migrate:create": "PAYLOAD_CONFIG_PATH=./payload.config.ts payload migrate:create",
+    "generate:types": "PAYLOAD_CONFIG_PATH=./payload.config.ts payload generate:types",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@payloadcms/db-sqlite": "4.0.0-canary.39",
+    "@payloadcms/graphql": "4.0.0-canary.39",
+    "@payloadcms/live-preview-react": "4.0.0-canary.39",
+    "@payloadcms/richtext-lexical": "4.0.0-canary.39",
+    "@payloadcms/translations": "4.0.0-canary.39",
+    "@payloadcms/ui": "4.0.0-canary.39",
+    "@react-router/serve": "8.4.0",
+    "graphql": "^16.8.1",
+    "payload": "4.0.0-canary.39",
+    "payload-react-router": "workspace:*",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-router": "8.4.0",
+    "react-server-dom-webpack": "19.3.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "@react-router/dev": "8.4.0",
+    "@types/node": "^24.10.1",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@vitejs/plugin-rsc": "0.5.35",
+    "esbuild": "^0.28.2",
+    "sass-embedded": "^1.93.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.3"
+  }
+}
