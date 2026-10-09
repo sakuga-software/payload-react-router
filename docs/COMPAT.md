@@ -93,10 +93,6 @@ Defects found and fixed in the adapter (version 0.1.2):
 - version-diff converters broken inside the Payload monorepo, where the CSS-strip pattern did not
   match `/packages/<pkg>/src/` paths (rich text diffs).
 
-The runs also found a crash in React Router itself (an aborted document request can stop the
-server process in RSC mode). It is reported privately to the React Router team; the runs above
-use a local patch for it.
-
 ## Server functions are public endpoints (NOTES P9)
 
 In React Router's RSC mode, a `'use server'` function is an endpoint that a POST to **any**
