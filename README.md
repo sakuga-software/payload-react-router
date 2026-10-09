@@ -20,7 +20,7 @@ view and layout adapters, server functions); `@payloadcms/ui` is used unmodified
 
 A complete demo app lives in [`demo/`](./demo): SQLite, Lexical, drafts and autosave, page
 blocks with live preview, uploads, two locales, a global, and a website that reads content
-through the Local API. A 35-test Playwright bench runs on it in CI against both the production
+through the Local API. A 36-test Playwright bench runs on it in CI against both the production
 build and `vite dev`. Scenarios and results are in [`docs/COMPAT.md`](./docs/COMPAT.md).
 
 ```bash
