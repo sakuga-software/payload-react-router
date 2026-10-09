@@ -67,29 +67,48 @@ const PUBLIC_ENV_PREFIXES = ['NEXT_PUBLIC_', 'PAYLOAD_PUBLIC_']
  *   `ReferenceError: process is not defined` in a plain Vite client.
  *   `NODE_ENV` is left to Vite.
  */
+function replaceProcessInClientCode(code: string): string | undefined {
+  if (!code.includes('process.')) {
+    return
+  }
+  const transformed = code
+    .replace(/process\.cwd\(\)/g, '"/"')
+    .replace(/process\.env\.([A-Z_][A-Z0-9_]*)/g, (match, name: string) => {
+      if (name === 'NODE_ENV') {
+        return match
+      }
+      const isPublic = PUBLIC_ENV_PREFIXES.some((prefix) => name.startsWith(prefix))
+      return isPublic ? JSON.stringify(process.env[name]) ?? 'undefined' : 'undefined'
+    })
+  return transformed === code ? undefined : transformed
+}
+
 function processInClient(): Plugin {
   return {
     name: 'payload:process-in-client',
     transform(code, id) {
       const envName = (this as unknown as { environment?: { name?: string } }).environment?.name
-      if (envName !== 'client' || !code.includes('process.')) {
+      if (envName !== 'client' || id.includes('node_modules/.vite')) {
         return
       }
-      if (id.includes('node_modules/.vite')) {
-        return
-      }
-      const transformed = code
-        .replace(/process\.cwd\(\)/g, '"/"')
-        .replace(/process\.env\.([A-Z_][A-Z0-9_]*)/g, (match, name: string) => {
-          if (name === 'NODE_ENV') {
-            return match
-          }
-          const isPublic = PUBLIC_ENV_PREFIXES.some((prefix) => name.startsWith(prefix))
-          return isPublic ? JSON.stringify(process.env[name]) ?? 'undefined' : 'undefined'
-        })
-      return transformed === code ? undefined : { code: transformed, map: null }
+      const transformed = replaceProcessInClientCode(code)
+      return transformed === undefined ? undefined : { code: transformed, map: null }
     },
   }
+}
+
+/**
+ * Applies the `process` replacement of `processInClient` to the dependencies that Vite
+ * pre-bundles for the browser. The optimizer bundles them before any Vite plugin can transform
+ * them, so a Next.js package that a Payload config imports (`next/link` reads
+ * `process.env.__NEXT_ROUTER_BASEPATH`) otherwise throws `process is not defined`.
+ */
+const processInOptimizedDeps = {
+  name: 'payload:process-in-optimized-deps',
+  transform(code: string) {
+    const transformed = replaceProcessInClientCode(code)
+    return transformed === undefined ? undefined : { code: transformed, map: null }
+  },
 }
 
 /**
@@ -149,6 +168,8 @@ export function payload(options: PayloadVitePluginOptions): PluginOption[] {
         },
         define: { global: 'globalThis' },
         environments: {
+          // Browser dependencies only: server code reads the real `process`.
+          client: { optimizeDeps: { rolldownOptions: { plugins: [processInOptimizedDeps] } } },
           rsc: serverEnvironment,
           ssr: serverEnvironment,
         },

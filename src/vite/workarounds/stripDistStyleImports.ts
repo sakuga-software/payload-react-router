@@ -22,8 +22,8 @@ const STATIC_STYLE_IMPORT_RE = /^[ \t]*import\s+['"][^'"]+\.(?:s?css|less)['"]\s
 const PAYLOAD_PKG_SRC_RE = /\/packages\/[^/]+\/src\//
 
 /**
- * The version-diff component trees — matched in either published `dist/` or
- * workspace `src/` form. The `.css` side-effect imports of these must be
+ * The version-diff component trees — matched in published `dist/` form, or in
+ * `src/` form inside the Payload monorepo (`/packages/<pkg>/src/`). The `.css` side-effect imports of these must be
  * stripped in the RSC env (the rest of `@payloadcms/ui` must NOT be — see the
  * note in `resolveId`/`transform` below), for two reasons rooted in the same
  * `@vitejs/plugin-rsc` behaviour: it wraps every exported CSS-importing
@@ -50,7 +50,7 @@ const PAYLOAD_PKG_SRC_RE = /\/packages\/[^/]+\/src\//
  * RSC collection and a broad strip leaves them unstyled.
  */
 const DIFF_VIEW_COMPONENT_RE =
-  /@payloadcms\/ui\/(?:dist|src)\/(?:icons|graphics|views\/Version|elements\/(?:HTMLDiff|FieldDiffContainer|FieldDiffLabel))\/|@payloadcms\/richtext-lexical\/(?:dist|src)\/field\/Diff\//
+  /(?:@payloadcms|\/packages)\/ui\/(?:dist|src)\/(?:icons|graphics|views\/Version|elements\/(?:HTMLDiff|FieldDiffContainer|FieldDiffLabel))\/|(?:@payloadcms|\/packages)\/richtext-lexical\/(?:dist|src)\/field\/Diff\//
 
 /**
  * Stops Vite (and the underlying Node ESM loader) from trying to load

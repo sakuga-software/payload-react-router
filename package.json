@@ -1,6 +1,6 @@
 {
   "name": "payload-react-router",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "React Router v8 (RSC framework mode) adapter for the Payload CMS admin panel and REST/GraphQL API",
   "keywords": [
     "payload",
