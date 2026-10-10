@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   react-router@8.4.0:
-    hash: afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a
+    hash: 4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a
     path: patches/react-router@8.4.0.patch
 
 importers:
@@ -55,7 +55,7 @@ importers:
         version: 19.3.0(react@19.3.0)
       react-router:
         specifier: 8.4.0
-        version: 8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+        version: 8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       react-server-dom-webpack:
         specifier: 19.3.0
         version: 19.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(webpack@5.111.1(esbuild@0.28.2))
@@ -88,7 +88,7 @@ importers:
         version: 4.0.0-canary.39(@types/react@19.2.14)(monaco-editor@0.57.0)(payload@4.0.0-canary.39(graphql@16.14.2)(typescript@5.9.3))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@5.9.3)
       '@react-router/serve':
         specifier: 8.4.0
-        version: 8.4.0(react-router@8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3)
+        version: 8.4.0(react-router@8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3)
       graphql:
         specifier: ^16.8.1
         version: 16.14.2
@@ -106,7 +106,7 @@ importers:
         version: 19.3.0(react@19.3.0)
       react-router:
         specifier: 8.4.0
-        version: 8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+        version: 8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       react-server-dom-webpack:
         specifier: 19.3.0
         version: 19.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(webpack@5.111.1(esbuild@0.28.2))
@@ -116,7 +116,7 @@ importers:
         version: 1.64.0
       '@react-router/dev':
         specifier: 8.4.0
-        version: 8.4.0(@react-router/serve@8.4.0(react-router@8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3))(@vitejs/plugin-rsc@0.5.35(react-dom@19.3.0(react@19.3.0))(react-server-dom-webpack@19.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(webpack@5.111.1(esbuild@0.28.2)))(react@19.3.0)(vite@8.3.4(@types/node@24.19.1)(esbuild@0.28.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)))(babel-plugin-macros@3.1.0)(react-router@8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-server-dom-webpack@19.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(webpack@5.111.1(esbuild@0.28.2)))(typescript@5.9.3)(vite@8.3.4(@types/node@24.19.1)(esbuild@0.28.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15))
+        version: 8.4.0(@react-router/serve@8.4.0(react-router@8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3))(@vitejs/plugin-rsc@0.5.35(react-dom@19.3.0(react@19.3.0))(react-server-dom-webpack@19.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(webpack@5.111.1(esbuild@0.28.2)))(react@19.3.0)(vite@8.3.4(@types/node@24.19.1)(esbuild@0.28.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)))(babel-plugin-macros@3.1.0)(react-router@8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-server-dom-webpack@19.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(webpack@5.111.1(esbuild@0.28.2)))(typescript@5.9.3)(vite@8.3.4(@types/node@24.19.1)(esbuild@0.28.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15))
       '@types/node':
         specifier: ^24.10.1
         version: 24.19.1
@@ -4490,14 +4490,14 @@ snapshots:
 
   '@preact/signals-core@1.14.4': {}
 
-  '@react-router/dev@8.4.0(@react-router/serve@8.4.0(react-router@8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3))(@vitejs/plugin-rsc@0.5.35(react-dom@19.3.0(react@19.3.0))(react-server-dom-webpack@19.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(webpack@5.111.1(esbuild@0.28.2)))(react@19.3.0)(vite@8.3.4(@types/node@24.19.1)(esbuild@0.28.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)))(babel-plugin-macros@3.1.0)(react-router@8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-server-dom-webpack@19.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(webpack@5.111.1(esbuild@0.28.2)))(typescript@5.9.3)(vite@8.3.4(@types/node@24.19.1)(esbuild@0.28.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15))':
+  '@react-router/dev@8.4.0(@react-router/serve@8.4.0(react-router@8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3))(@vitejs/plugin-rsc@0.5.35(react-dom@19.3.0(react@19.3.0))(react-server-dom-webpack@19.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(webpack@5.111.1(esbuild@0.28.2)))(react@19.3.0)(vite@8.3.4(@types/node@24.19.1)(esbuild@0.28.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)))(babel-plugin-macros@3.1.0)(react-router@8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-server-dom-webpack@19.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(webpack@5.111.1(esbuild@0.28.2)))(typescript@5.9.3)(vite@8.3.4(@types/node@24.19.1)(esbuild@0.28.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15))':
     dependencies:
       '@babel/core': 7.29.7
       '@babel/generator': 7.29.8
       '@babel/parser': 7.29.9
       '@babel/traverse': 7.29.10
       '@babel/types': 7.29.8
-      '@react-router/node': 8.4.0(react-router@8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3)
+      '@react-router/node': 8.4.0(react-router@8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3)
       '@remix-run/node-fetch-server': 0.14.2
       babel-dead-code-elimination: 1.0.12
       chokidar: 5.0.0
@@ -4512,13 +4512,13 @@ snapshots:
       picocolors: 1.1.1
       pkg-types: 2.3.3
       react-refresh: 0.18.0
-      react-router: 8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      react-router: 8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       semver: 7.8.5
       tinyglobby: 0.2.17
       valibot: 1.5.0(typescript@5.9.3)
       vite: 8.3.4(@types/node@24.19.1)(esbuild@0.28.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)
     optionalDependencies:
-      '@react-router/serve': 8.4.0(react-router@8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3)
+      '@react-router/serve': 8.4.0(react-router@8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3)
       '@vitejs/plugin-rsc': 0.5.35(react-dom@19.3.0(react@19.3.0))(react-server-dom-webpack@19.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(webpack@5.111.1(esbuild@0.28.2)))(react@19.3.0)(vite@8.3.4(@types/node@24.19.1)(esbuild@0.28.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15))
       react-server-dom-webpack: 19.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(webpack@5.111.1(esbuild@0.28.2))
       typescript: 5.9.3
@@ -4526,30 +4526,30 @@ snapshots:
       - babel-plugin-macros
       - supports-color
 
-  '@react-router/express@8.4.0(express@5.2.1)(react-router@8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3)':
+  '@react-router/express@8.4.0(express@5.2.1)(react-router@8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3)':
     dependencies:
-      '@react-router/node': 8.4.0(react-router@8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3)
+      '@react-router/node': 8.4.0(react-router@8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3)
       express: 5.2.1
-      react-router: 8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      react-router: 8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
     optionalDependencies:
       typescript: 5.9.3
 
-  '@react-router/node@8.4.0(react-router@8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3)':
+  '@react-router/node@8.4.0(react-router@8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3)':
     dependencies:
       '@remix-run/node-fetch-server': 0.14.2
-      react-router: 8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      react-router: 8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
     optionalDependencies:
       typescript: 5.9.3
 
-  '@react-router/serve@8.4.0(react-router@8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3)':
+  '@react-router/serve@8.4.0(react-router@8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3)':
     dependencies:
-      '@react-router/express': 8.4.0(express@5.2.1)(react-router@8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3)
-      '@react-router/node': 8.4.0(react-router@8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3)
+      '@react-router/express': 8.4.0(express@5.2.1)(react-router@8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3)
+      '@react-router/node': 8.4.0(react-router@8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@5.9.3)
       '@remix-run/node-fetch-server': 0.14.2
       compression: 1.8.2
       express: 5.2.1
       morgan: 1.12.1
-      react-router: 8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      react-router: 8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       source-map-support: 0.5.21
     transitivePeerDependencies:
       - supports-color
@@ -6076,7 +6076,7 @@ snapshots:
 
   react-refresh@0.18.0: {}
 
-  react-router@8.4.0(patch_hash=afd2b190ca052e317e859bb6af00b9147efd77353a4d2a3ee411772418b3961a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
+  react-router@8.4.0(patch_hash=4f0116179bf7d078b4b68d540554a1207a88effbc2ea29c352080c662880725a)(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
       '@remix-run/route-pattern': 0.22.1
       cookie-es: 3.1.1

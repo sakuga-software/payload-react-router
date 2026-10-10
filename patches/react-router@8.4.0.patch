@@ -1,5 +1,5 @@
 diff --git a/dist/development/lib/rsc/html-stream/server.js b/dist/development/lib/rsc/html-stream/server.js
-index 326e0ea1136babf7a9ed03bb59087140069758bf..6804d2a45649ed37a2821b2aeb2efb37423e570e 100644
+index 326e0ea1136babf7a9ed03bb59087140069758bf..a579d482b2536e7898279eb4f8801cc2b2f755a3 100644
 --- a/dist/development/lib/rsc/html-stream/server.js
 +++ b/dist/development/lib/rsc/html-stream/server.js
 @@ -21,11 +21,31 @@ function injectRSCPayload(rscStream, { nonce } = {}) {
@@ -13,7 +13,7 @@ index 326e0ea1136babf7a9ed03bb59087140069758bf..6804d2a45649ed37a2821b2aeb2efb37
 +			timeout = null;
 +		}
 +		buffered.length = 0;
-+		if (rscReader) await rscReader.cancel(reason).catch(() => {});
++		if (rscReader && rscStream.locked) await rscReader.cancel(reason).catch(() => {});
 +		else await rscStream.cancel(reason).catch(() => {});
 +		resolveFlightDataPromise();
 +	}
@@ -80,7 +80,7 @@ index 326e0ea1136babf7a9ed03bb59087140069758bf..6804d2a45649ed37a2821b2aeb2efb37
  	});
  }
 diff --git a/dist/production/lib/rsc/html-stream/server.js b/dist/production/lib/rsc/html-stream/server.js
-index 326e0ea1136babf7a9ed03bb59087140069758bf..6804d2a45649ed37a2821b2aeb2efb37423e570e 100644
+index 326e0ea1136babf7a9ed03bb59087140069758bf..a579d482b2536e7898279eb4f8801cc2b2f755a3 100644
 --- a/dist/production/lib/rsc/html-stream/server.js
 +++ b/dist/production/lib/rsc/html-stream/server.js
 @@ -21,11 +21,31 @@ function injectRSCPayload(rscStream, { nonce } = {}) {
@@ -94,7 +94,7 @@ index 326e0ea1136babf7a9ed03bb59087140069758bf..6804d2a45649ed37a2821b2aeb2efb37
 +			timeout = null;
 +		}
 +		buffered.length = 0;
-+		if (rscReader) await rscReader.cancel(reason).catch(() => {});
++		if (rscReader && rscStream.locked) await rscReader.cancel(reason).catch(() => {});
 +		else await rscStream.cancel(reason).catch(() => {});
 +		resolveFlightDataPromise();
 +	}
