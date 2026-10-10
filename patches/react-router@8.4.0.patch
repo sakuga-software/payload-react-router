@@ -1,5 +1,5 @@
 diff --git a/dist/development/lib/rsc/html-stream/server.js b/dist/development/lib/rsc/html-stream/server.js
-index 326e0ea1136babf7a9ed03bb59087140069758bf..a579d482b2536e7898279eb4f8801cc2b2f755a3 100644
+index 326e0ea1136babf7a9ed03bb59087140069758bf..ccfef142cb56f08bd58caf0eeb40790d61e1f7a6 100644
 --- a/dist/development/lib/rsc/html-stream/server.js
 +++ b/dist/development/lib/rsc/html-stream/server.js
 @@ -21,11 +21,31 @@ function injectRSCPayload(rscStream, { nonce } = {}) {
@@ -13,9 +13,9 @@ index 326e0ea1136babf7a9ed03bb59087140069758bf..a579d482b2536e7898279eb4f8801cc2
 +			timeout = null;
 +		}
 +		buffered.length = 0;
++		resolveFlightDataPromise();
 +		if (rscReader && rscStream.locked) await rscReader.cancel(reason).catch(() => {});
 +		else await rscStream.cancel(reason).catch(() => {});
-+		resolveFlightDataPromise();
 +	}
 +	function tryEnqueue(controller, chunk) {
 +		try {
@@ -35,7 +35,7 @@ index 326e0ea1136babf7a9ed03bb59087140069758bf..a579d482b2536e7898279eb4f8801cc2
  		}
  		buffered.length = 0;
  		timeout = null;
-@@ -37,31 +57,32 @@ function injectRSCPayload(rscStream, { nonce } = {}) {
+@@ -37,31 +57,28 @@ function injectRSCPayload(rscStream, { nonce } = {}) {
  			timeout = setTimeout(async () => {
  				if (cancelled) return;
  				flushBufferedChunks(controller);
@@ -45,12 +45,7 @@ index 326e0ea1136babf7a9ed03bb59087140069758bf..a579d482b2536e7898279eb4f8801cc2
  					rscReader = rscStream.getReader();
 -					writeRSCStream(rscReader, controller, () => cancelled, nonce).catch((err) => controller.error(err)).then(resolveFlightDataPromise);
 +					writeRSCStream(rscReader, controller, () => cancelled, nonce).catch((err) => {
-+						if (cancelled) return;
-+						try {
-+							controller.error(err);
-+						} catch (error) {
-+							return stop(error);
-+						}
++						if (!cancelled) controller.error(err);
 +					}).then(resolveFlightDataPromise);
  				}
  			}, 0);
@@ -61,6 +56,7 @@ index 326e0ea1136babf7a9ed03bb59087140069758bf..a579d482b2536e7898279eb4f8801cc2
  			if (timeout) {
  				clearTimeout(timeout);
  				flushBufferedChunks(controller);
++				if (cancelled) return;
  			}
 -			controller.enqueue(encoder.encode("</body></html>"));
 +			tryEnqueue(controller, encoder.encode("</body></html>"));
@@ -80,7 +76,7 @@ index 326e0ea1136babf7a9ed03bb59087140069758bf..a579d482b2536e7898279eb4f8801cc2
  	});
  }
 diff --git a/dist/production/lib/rsc/html-stream/server.js b/dist/production/lib/rsc/html-stream/server.js
-index 326e0ea1136babf7a9ed03bb59087140069758bf..a579d482b2536e7898279eb4f8801cc2b2f755a3 100644
+index 326e0ea1136babf7a9ed03bb59087140069758bf..ccfef142cb56f08bd58caf0eeb40790d61e1f7a6 100644
 --- a/dist/production/lib/rsc/html-stream/server.js
 +++ b/dist/production/lib/rsc/html-stream/server.js
 @@ -21,11 +21,31 @@ function injectRSCPayload(rscStream, { nonce } = {}) {
@@ -94,9 +90,9 @@ index 326e0ea1136babf7a9ed03bb59087140069758bf..a579d482b2536e7898279eb4f8801cc2
 +			timeout = null;
 +		}
 +		buffered.length = 0;
++		resolveFlightDataPromise();
 +		if (rscReader && rscStream.locked) await rscReader.cancel(reason).catch(() => {});
 +		else await rscStream.cancel(reason).catch(() => {});
-+		resolveFlightDataPromise();
 +	}
 +	function tryEnqueue(controller, chunk) {
 +		try {
@@ -116,7 +112,7 @@ index 326e0ea1136babf7a9ed03bb59087140069758bf..a579d482b2536e7898279eb4f8801cc2
  		}
  		buffered.length = 0;
  		timeout = null;
-@@ -37,31 +57,32 @@ function injectRSCPayload(rscStream, { nonce } = {}) {
+@@ -37,31 +57,28 @@ function injectRSCPayload(rscStream, { nonce } = {}) {
  			timeout = setTimeout(async () => {
  				if (cancelled) return;
  				flushBufferedChunks(controller);
@@ -126,12 +122,7 @@ index 326e0ea1136babf7a9ed03bb59087140069758bf..a579d482b2536e7898279eb4f8801cc2
  					rscReader = rscStream.getReader();
 -					writeRSCStream(rscReader, controller, () => cancelled, nonce).catch((err) => controller.error(err)).then(resolveFlightDataPromise);
 +					writeRSCStream(rscReader, controller, () => cancelled, nonce).catch((err) => {
-+						if (cancelled) return;
-+						try {
-+							controller.error(err);
-+						} catch (error) {
-+							return stop(error);
-+						}
++						if (!cancelled) controller.error(err);
 +					}).then(resolveFlightDataPromise);
  				}
  			}, 0);
@@ -142,6 +133,7 @@ index 326e0ea1136babf7a9ed03bb59087140069758bf..a579d482b2536e7898279eb4f8801cc2
  			if (timeout) {
  				clearTimeout(timeout);
  				flushBufferedChunks(controller);
++				if (cancelled) return;
  			}
 -			controller.enqueue(encoder.encode("</body></html>"));
 +			tryEnqueue(controller, encoder.encode("</body></html>"));
